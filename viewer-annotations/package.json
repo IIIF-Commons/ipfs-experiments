@@ -1,0 +1,35 @@
+{
+  "name": "viewer-annotations",
+  "version": "1.0.0",
+  "description": "An example of using ipfs to communicate with linked data in IIIF.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viewdir/ipfs-experiments.git"
+  },
+  "keywords": [
+    "ipfs",
+    "universalviewer",
+    "mirador",
+    "iiif",
+    "annotations"
+  ],
+  "author": "aeschylus, edsliv",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/viewdir/ipfs-experiments/issues"
+  },
+  "homepage": "https://github.com/viewdir/ipfs-experiments#readme",
+  "devDependencies": {
+    "jest": "^19.0.2"
+  },
+  "dependencies": {
+    "fetch": "^1.1.0",
+    "ipfs-iiif-annotations": "git+https://github.com/pgte/ipfs-iiif-db.git",
+    "mirador": "^2.1.4",
+    "uv": "0.0.0"
+  }
+}
