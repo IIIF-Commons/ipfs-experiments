@@ -4,7 +4,7 @@
   "description": "An example of using ipfs to communicate with linked data in IIIF.",
   "main": "index.js",
   "scripts": {
-    "copy": "cp -R node_modules/universalviewer/uv/ vendor/ && cp -R node_modules/mirador/ vendor/",
+    "copy": "cp -R node_modules/universalviewer/uv/ vendor/ && cp -R node_modules/mirador/ vendor/ && cp -R node_modules/ipfs-iiif-annotations/examples/simple-producer-consumer/public/js/ ./",
     "serve": "http-server -c-1 -p 8080",
     "start": "npm run copy && npm run serve"
   },
