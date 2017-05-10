@@ -1,0 +1,33 @@
+<html>
+<head>
+    <script src="https://unpkg.com/ipfs-iiif-db/dist/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+</head>
+<body>
+
+    <textarea id="annotations" rows="10" cols="10"></textarea>
+
+    <button id="submit">Set</button>
+
+    <script>
+        // ipfs-iiif-db
+
+        var id = "ipfs-iiif-db-example";
+
+        var db = IpfsIiifDb();
+
+        db.start(function() {
+            console.log("ipfs started");
+        });
+
+        $('#submit').on('click', function() {
+            var val = $('#annotations').val();
+
+            db.put(id, val, function() {
+                console.log("value put");
+            });
+        });
+
+    </script>
+</body>
+</html>
