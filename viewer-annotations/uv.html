@@ -46,63 +46,60 @@
         window.addEventListener('uvLoaded', function(e) { 
 
             urlDataProvider = new UV.URLDataProvider();
-            setupUV();
-
-        }, false);
-
-        function setupUV() {
-
             uv = createUV('#uv', {}, urlDataProvider);
 
-            // uv.on('created', function() {
-            //     Utils.Urls.setHashParameter('manifest', manifest);
-            // });
-        }
+            $('#setManifestButton').on('click', function() {
+                
+                manifest = $('#manifest').val();
 
-        $('#setManifestButton').on('click', function() {
-            manifest = $('#manifest').val();
-
-            uv.set({
-                root: 'vendor/uv',
-                iiifResourceUri: manifest,
-                collectionIndex: 0,
-                manifestIndex: 0,
-                sequenceIndex: 0,
-                canvasIndex: 0,
-                locales: [
-                    {
-                        name: "en-GB"
-                    }
-                ]
-            });
-        });
-
-        $('#updateAnnotations').on('click', function() {
-            
-            var annotations = JSON.parse($('#annotations').val());
-            
-            uv.set({
-                annotations: annotations
-            });
-        });
-
-        // ipfs-iiif-db
-
-        var id = "ipfs-iiif-db-example";
-
-        var db = IpfsIiifDb();
-
-        db.start(function() {
-            console.log("ipfs started");
-
-            var changes = db.get(id, true, (newValue) => {
-                console.log('new value is: %j', newValue)
+                uv.set({
+                    root: 'vendor/uv',
+                    iiifResourceUri: manifest,
+                    collectionIndex: 0,
+                    manifestIndex: 0,
+                    sequenceIndex: 0,
+                    canvasIndex: 0,
+                    locales: [
+                        {
+                            name: "en-GB"
+                        }
+                    ]
+                });
             });
 
-            changes.on('change', (newValue) => {
-                console.log('new value is: %j', newValue)
+            $('#updateAnnotations').on('click', function() {
+                
+                var annotations = JSON.parse($('#annotations').val());
+                
+                uv.set({
+                    annotations: annotations
+                });
             });
-        });
+
+            function setAnnotations(annotations) {
+                uv.set({
+                    annotations: JSON.parse(annotations)
+                });
+            }
+
+            // ipfs-iiif-db
+
+            var id = "ipfs-iiif-db-example";
+
+            var db = IpfsIiifDb();
+
+            db.start(function() {
+                
+                var changes = db.get(id, true, (annotations) => {
+                    setAnnotations(annotations);
+                });
+
+                changes.on('change', (annotations) => {
+                    setAnnotations(annotations);
+                });
+            });
+
+        }, false);
 
     </script>
 
