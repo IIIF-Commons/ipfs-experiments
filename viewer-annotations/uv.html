@@ -29,14 +29,10 @@
 
     <div id="uv" class="uv"></div>
 
-    <div id="options">
-        <input id="manifest" type="text" value="" />
+    <div id="options" style="display: none">
+        <input id="manifest" placeholder="iiif manifest" type="text" value="" />
         <a id="setManifestButton" class="button" href="#">Set</a>
-    </div>
-
-    <div>
-        <textarea id="annotations" rows="10" cols="50" placeholder="annotations"></textarea>
-        <button id="updateAnnotations">Update</button>
+        <button id="connect">Connect to IPFS</button>
     </div>
 
     <script type="text/javascript">
@@ -47,6 +43,8 @@
 
             urlDataProvider = new UV.URLDataProvider();
             uv = createUV('#uv', {}, urlDataProvider);
+
+            $('#options').show();
 
             $('#setManifestButton').on('click', function() {
                 
@@ -67,14 +65,27 @@
                 });
             });
 
-            $('#updateAnnotations').on('click', function() {
-                
-                var annotations = JSON.parse($('#annotations').val());
-                
-                uv.set({
-                    annotations: annotations
+            function connect(cb) {
+
+                // ipfs-iiif-db
+
+                var id = "ipfs-iiif-db-example";
+
+                var db = IpfsIiifDb();
+
+                db.start(function() {
+
+                    var changes = db.get(id, true, (annotations) => {
+                        setAnnotations(annotations);
+                    });
+
+                    changes.on('change', (annotations) => {
+                        setAnnotations(annotations);
+                    });
+
+                    cb();
                 });
-            });
+            }
 
             function setAnnotations(annotations) {
                 uv.set({
@@ -82,21 +93,16 @@
                 });
             }
 
-            // ipfs-iiif-db
+            var $connect = $('#connect');
 
-            var id = "ipfs-iiif-db-example";
-
-            var db = IpfsIiifDb();
-
-            db.start(function() {
-                
-                var changes = db.get(id, true, (annotations) => {
-                    setAnnotations(annotations);
-                });
-
-                changes.on('change', (annotations) => {
-                    setAnnotations(annotations);
-                });
+            $connect.on('click', function() {
+                if (!manifest) {
+                    alert('please select a manifest to annotate');
+                } else {
+                    connect(function() {
+                        $connect.prop('disabled', true);
+                    });
+                }
             });
 
         }, false);
