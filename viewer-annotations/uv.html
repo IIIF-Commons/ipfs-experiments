@@ -30,76 +30,77 @@
     <div id="uv" class="uv"></div>
 
     <div id="options" style="display: none">
-        <input id="manifest" placeholder="iiif manifest" type="text" value="" />
-        <a id="setManifestButton" class="button" href="#">Set</a>
-        <button id="connect">Connect to IPFS</button>
+        <div>
+            <input id="manifest" placeholder="iiif manifest" type="text" value="" />
+            <input id="topic" type="text" placeholder="topic" value="ipfs-iiif-db-example" />
+            <button id="connect">Connect to IPFS</button>
+        </div>
     </div>
 
     <script type="text/javascript">
 
-        var uv, manifest, urlDataProvider;
+        var uv;
+
+        function connect(manifest, topic, cb) {
+
+            uv.set({
+                root: 'vendor/uv',
+                iiifResourceUri: manifest,
+                collectionIndex: 0,
+                manifestIndex: 0,
+                sequenceIndex: 0,
+                canvasIndex: 0,
+                locales: [
+                    {
+                        name: "en-GB"
+                    }
+                ]
+            });
+
+            var db = IpfsIiifDb();
+
+            db.start(function() {
+
+                var changes = db.get(topic, true, (annotations) => {
+                    setAnnotations(annotations);
+                });
+
+                changes.on('change', (annotations) => {
+                    setAnnotations(annotations);
+                });
+
+                cb();
+            });
+        }
+
+        function setAnnotations(annotations) {
+            uv.set({
+                annotations: JSON.parse(annotations)
+            });
+        }
 
         window.addEventListener('uvLoaded', function(e) { 
 
-            urlDataProvider = new UV.URLDataProvider();
+            console.log('uv loaded');
+
+            var urlDataProvider = new UV.URLDataProvider();
             uv = createUV('#uv', {}, urlDataProvider);
 
             $('#options').show();
 
-            $('#setManifestButton').on('click', function() {
-                
-                manifest = $('#manifest').val();
-
-                uv.set({
-                    root: 'vendor/uv',
-                    iiifResourceUri: manifest,
-                    collectionIndex: 0,
-                    manifestIndex: 0,
-                    sequenceIndex: 0,
-                    canvasIndex: 0,
-                    locales: [
-                        {
-                            name: "en-GB"
-                        }
-                    ]
-                });
-            });
-
-            function connect(cb) {
-
-                // ipfs-iiif-db
-
-                var id = "ipfs-iiif-db-example";
-
-                var db = IpfsIiifDb();
-
-                db.start(function() {
-
-                    var changes = db.get(id, true, (annotations) => {
-                        setAnnotations(annotations);
-                    });
-
-                    changes.on('change', (annotations) => {
-                        setAnnotations(annotations);
-                    });
-
-                    cb();
-                });
-            }
-
-            function setAnnotations(annotations) {
-                uv.set({
-                    annotations: JSON.parse(annotations)
-                });
-            }
-
             var $connect = $('#connect');
 
             $connect.on('click', function() {
+
+                var manifest = $('#manifest').val();
+                var topic = $('#topic').val();
+ 
                 if (!manifest) {
-                    alert('please select a manifest to annotate');
+                    alert('please specify a manifest to annotate');
+                } else if (!topic) {
+                    alert('please specify an annotation topic');
                 } else {
-                    connect(function() {
+                    connect(manifest, topic, function() {
                         $connect.prop('disabled', true);
                     });
                 }
