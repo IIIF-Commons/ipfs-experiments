@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "copy": "cp -R node_modules/universalviewer/uv/ vendor/ && cp -R node_modules/mirador/ vendor/",
-    "serve": "http-server -c-1 -p 8080",
+    "serve": "http-server -c-1 -p 8083",
     "start": "npm run copy && npm run serve"
   },
   "repository": {
