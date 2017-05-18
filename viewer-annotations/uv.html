@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="vendor/uv/helpers/uv.css">
     <script type="text/javascript" src="vendor/uv/lib/offline.js"></script>
     <script type="text/javascript" src="vendor/uv/helpers/helpers.js"></script>
-    <script src="https://unpkg.com/ipfs-iiif-db/dist/index.js"></script>
+    <script src="http://unpkg.com/ipfs-iiif-db@2.0.0/dist/index.min.js"></script>
     <style>
         body {
             margin: 0px;
@@ -30,7 +30,7 @@
 
     <div id="options" style="display: none">
         <div>
-            <input id="manifest" placeholder="iiif manifest" type="text" value="" />
+            <input id="manifest" placeholder="iiif manifest" type="text" value="http://wellcomelibrary.org/iiif/b18035723/manifest" />
             <input id="topic" type="text" placeholder="topic" value="ipfs-iiif-db-example" />
             <button id="connect">Connect to IPFS</button>
         </div>
@@ -58,23 +58,42 @@
 
             var db = IpfsIiifDb();
 
-            db.start(function() {
+            db.ipfs.once('ready', () => {
 
-                var changes = db.get(topic, true, (annotations) => {
-                    setAnnotations(annotations);
+                db.ipfs.id((err, _peerInfo) => {
+
+                    var annotationList = db.annotationList(topic, {
+                        "@context": "http://iiif.io/api/search/0/context.json",
+                        "@id": "https://wellcomelibrary.org/annoservices/search/b18035723?q=gene",
+                        "@type": "sc:AnnotationList",
+                        "within": {
+                            "@type": "sc:Layer"
+                        },
+                        "startIndex": 0,
+                        "resources": []
+                    });
+
+                    annotationList.on('mutation', (event) => {
+                        console.log('new mutation', event);
+                        setAnnotations(annotationList.toJSON());
+                    });
+
+                    // var changes = db.get(topic, true, (annotations) => {
+                    //     setAnnotations(annotations);
+                    // });
+
+                    // changes.on('change', (annotations) => {
+                    //     setAnnotations(annotations);
+                    // });
+
+                    cb();
                 });
-
-                changes.on('change', (annotations) => {
-                    setAnnotations(annotations);
-                });
-
-                cb();
             });
         }
 
         function setAnnotations(annotations) {
             uv.set({
-                annotations: JSON.parse(annotations)
+                annotations: annotations
             });
         }
 

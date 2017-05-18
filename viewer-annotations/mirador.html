@@ -1,32 +1,49 @@
 <html>
 <head>
-    <script src="https://unpkg.com/ipfs-iiif-db/dist/index.js"></script>
+    <script src="http://unpkg.com/ipfs-iiif-db@2.0.0/dist/index.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 </head>
 <body>
 
-    <textarea id="annotations" rows="10" cols="50"></textarea>
+    <!--<textarea id="annotations" rows="10" cols="50"></textarea>-->
 
-    <button id="submit">Set</button>
+    <button id="addAnnotation" disabled>Add Annotation</button>
 
     <script>
-        // ipfs-iiif-db
+        // load test annotations
+        $.getJSON('test-annotations.json', function(testAnnotations) {
+            
+            var topic = "ipfs-iiif-db-example";
+            var annotationList;
+            var db = IpfsIiifDb();
+            var $addAnnotation = $('#addAnnotation');
 
-        var id = "ipfs-iiif-db-example";
+            db.ipfs.once('ready', () => {
+                db.ipfs.id((err, _peerInfo) => {
+                
+                    console.log("ipfs started");
 
-        var db = IpfsIiifDb();
+                    annotationList = db.annotationList(topic, {
+                        "@context": "http://iiif.io/api/search/0/context.json",
+                        "@id": "https://wellcomelibrary.org/annoservices/search/b18035723?q=gene",
+                        "@type": "sc:AnnotationList",
+                        "within": {
+                            "@type": "sc:Layer"
+                        },
+                        "startIndex": 0,
+                        "resources": []
+                    });
 
-        db.start(function() {
-            console.log("ipfs started");
-        });
+                    $addAnnotation.prop('disabled', false);
 
-        $('#submit').on('click', function() {
-            var val = $('#annotations').val();
-
-            db.put(id, val, function() {
-                console.log("value put");
+                });
             });
-        });
+
+            $addAnnotation.on('click', function() {
+                var annotation = testAnnotations[Math.floor(Math.random() * testAnnotations.length)]
+                annotationList.pushResource(annotation);
+            });
+        }); 
 
     </script>
 </body>
