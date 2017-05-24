@@ -31,6 +31,6 @@
   "dependencies": {
     "fetch": "^1.1.0",
     "mirador": "^2.1.4",
-    "universalviewer": "universalviewer/examples#v3"
+    "universalviewer": "universalviewer/examples#gh-pages"
   }
 }

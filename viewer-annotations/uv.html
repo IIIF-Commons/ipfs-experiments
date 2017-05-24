@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Universal Viewer</title>
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="vendor/uv/helpers/uv.css">
+    <link rel="stylesheet" type="text/css" href="vendor/uv/uv.css">
     <script type="text/javascript" src="vendor/uv/lib/offline.js"></script>
-    <script type="text/javascript" src="vendor/uv/helpers/helpers.js"></script>
-    <script src="http://unpkg.com/ipfs-iiif-db@2.0.0/dist/index.min.js"></script>
+    <script type="text/javascript" src="vendor/uv/helpers.js"></script>
+    <script src="https://unpkg.com/ipfs-iiif-db/dist/browser.min.js"></script>
     <style>
         body {
             margin: 0px;
@@ -62,7 +62,7 @@
 
                 db.ipfs.id((err, _peerInfo) => {
 
-                    var annotationList = db.annotationList(topic, {
+                    var annotationList = db.annotationList({
                         "@context": "http://iiif.io/api/search/0/context.json",
                         "@id": "https://wellcomelibrary.org/annoservices/search/b18035723?q=gene",
                         "@type": "sc:AnnotationList",
