@@ -1,6 +1,7 @@
 <html>
 <head>
     <title>Mirador Viewer</title>
+    <link rel="stylesheet" type="text/css" href="vendor/mirador/css/mirador-combined.min.css">
     <style type="text/css">
      #viewer {
        width: 100%;
@@ -10,20 +11,20 @@
     </style>
     <script src="https://unpkg.com/ipfs-iiif-db/dist/browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-    <script src="build/mirador/ipfs-endpoint.js"></script>
-    <script src="build/mirador/mirador.js"></script>
+    <script src="js/ipfs-endpoint.js"></script>
+    <script src="vendor/mirador/mirador.min.js"></script>
 </head>
 <body>
 
     <!--<textarea id="annotations" rows="10" cols="50"></textarea>-->
 
     <button id="addAnnotation" disabled>Add Annotation</button>
-
+    <div id="viewer">
+    </div>
 
     <script>
         // load test annotations
         $.getJSON('test-annotations.json', function(testAnnotations) {
-            
             var topic = "ipfs-iiif-db-example";
             var annotationList;
             var db = IpfsIiifDb();
@@ -31,7 +32,6 @@
 
             db.ipfs.once('ready', () => {
                 db.ipfs.id((err, _peerInfo) => {
-                
                     console.log("ipfs started");
 
                     annotationList = db.annotationList({
@@ -61,9 +61,10 @@
        // Called without "let" or "var"
        // so we can play with it in the browser
        myMiradorInstance = Mirador({
-         "id": "viewer",
-         "layout": "1x1",
-         "data": [
+         id: "viewer",
+         layout: "1x1",
+         buildPath: 'vendor/build/mirador',
+         data: [
            { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:48309543", "location": "Harvard University"},
            { "manifestUri": "https://iiif.lib.harvard.edu/manifests/drs:5981093", "location": "Harvard University"},
            { "manifestUri": "https://iiif.lib.harvard.edu/manifests/via:olvwork576793", "location": "Harvard University"},
