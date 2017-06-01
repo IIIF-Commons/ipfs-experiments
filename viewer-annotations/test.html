@@ -1,0 +1,44 @@
+<html>
+<head>
+    <script src="https://unpkg.com/ipfs-iiif-db/dist/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+</head>
+<body>
+
+    <!--<textarea id="annotations" rows="10" cols="50"></textarea>-->
+
+    <button id="addAnnotation" disabled>Add Annotation</button>
+
+    <script>
+        // load test annotations
+        $.getJSON('test-annotations.json', function(testAnnotations) {
+            
+            var topic = "ipfs-iiif-db-example";
+            var annotationList;
+            var db = IpfsIiifDb();
+            var $addAnnotation = $('#addAnnotation');
+            db.ipfs.once('ready', () => {
+                db.ipfs.id((err, _peerInfo) => {
+                
+                    console.log("ipfs started");
+                    annotationList = db.annotationList({
+                        "@context": "http://iiif.io/api/search/0/context.json",
+                        "@id": "http://wellcomelibrary.org/iiif/b18035723/manifest#ipfs-iiif-db-example",
+                        "@type": "sc:AnnotationList",
+                        "within": {
+                            "@type": "sc:Layer"
+                        },
+                        "startIndex": 0,
+                        "resources": []
+                    });
+                    $addAnnotation.prop('disabled', false);
+                });
+            });
+            $addAnnotation.on('click', function() {
+                var annotation = testAnnotations[Math.floor(Math.random() * testAnnotations.length)]
+                annotationList.pushResource(annotation);
+            });
+        }); 
+    </script>
+</body>
+</html>
