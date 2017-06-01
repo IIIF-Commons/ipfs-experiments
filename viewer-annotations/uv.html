@@ -75,9 +75,11 @@
                         "resources": []
                     });
 
-                    annotationList.on('mutation', (event) => {
+                  annotationList.on('mutation', (event) => {
                         console.log('new mutation', event);
-                        setAnnotations(annotationList.toJSON());
+                    console.log('parsed annotations');
+                    console.log(convertAnnotations(annotationList.toJSON()));
+                        setAnnotations(convertAnnotations(annotationList.toJSON()));
                     });
 
                     // var changes = db.get(topic, true, (annotations) => {
@@ -93,7 +95,25 @@
             });
         }
 
+     function convertAnnotations(annotations) {
+       annotations.resources = annotations.resources.map(function(annotation) {
+         return {
+           "@id": annotation['@id'],
+           "@type": "oa:Annotation",
+           "motivation": "sc:painting",
+           "resource": {
+             "@type": "cnt:ContentAsText",
+             "chars": annotation.resource[0].chars
+           },
+           "on": annotation.on[0].full + '#' + annotation.on[0].selector.default.value
+         };
+       });
+
+       return annotations;
+     }
+
         function setAnnotations(annotations) {
+          console.log(annotations);
             uv.set({
                 annotations: annotations
             });
