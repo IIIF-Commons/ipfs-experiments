@@ -62,7 +62,7 @@
 
                 db.ipfs.id((err, _peerInfo) => {
 
-                    var annotationList = db.annotationList("http://files.universalviewer.io/annotationlist/richardson7.json#ipfs-iiif-db-example");
+                    var annotationList = db.annotationList("http://wellcomelibrary.org/iiif/b18035723/manifest#ipfs-iiif-db-example");
 
                     annotationList.on('mutation', (event) => {
                         console.log('new mutation', event);
@@ -109,7 +109,7 @@
                 // } else if (!topic) {
                 //     alert('please specify an annotation topic');
                 // } else {
-                    connect('http://files.universalviewer.io/annotationlist/richardson7.json#ipfs-iiif-db-example', function() {
+                    connect('http://wellcomelibrary.org/iiif/b18035723/manifest#ipfs-iiif-db-example', function() {
                         $connect.prop('disabled', true);
                     });
                 //}
