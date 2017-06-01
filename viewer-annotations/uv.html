@@ -62,6 +62,8 @@
 
                 db.ipfs.id((err, _peerInfo) => {
 
+                    console.log("uv peerid:", _peerInfo.id);
+
                     var annotationList = db.annotationList({
                         "@context": "http://iiif.io/api/search/0/context.json",
                         "@id": "http://wellcomelibrary.org/iiif/b18035723/manifest#ipfs-iiif-db-example",
@@ -110,14 +112,14 @@
 
             $connect.on('click', function() {
 
-                var manifest = $('#manifest').val();
+                //var manifest = $('#manifest').val();
  
                 // if (!manifest) {
                 //     alert('please specify a manifest to annotate');
                 // } else if (!topic) {
                 //     alert('please specify an annotation topic');
                 // } else {
-                    connect(manifest, function() {
+                    connect('http://wellcomelibrary.org/iiif/b18035723/manifest', function() {
                         $connect.prop('disabled', true);
                     });
                 //}

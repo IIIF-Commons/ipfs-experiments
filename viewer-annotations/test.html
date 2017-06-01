@@ -19,8 +19,11 @@
             var $addAnnotation = $('#addAnnotation');
             db.ipfs.once('ready', () => {
                 db.ipfs.id((err, _peerInfo) => {
-                
+            
                     console.log("ipfs started");
+
+                    console.log("test peerid:", _peerInfo.id);
+
                     annotationList = db.annotationList({
                         "@context": "http://iiif.io/api/search/0/context.json",
                         "@id": "http://wellcomelibrary.org/iiif/b18035723/manifest#ipfs-iiif-db-example",
