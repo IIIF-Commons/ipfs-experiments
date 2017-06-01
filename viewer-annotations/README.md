@@ -1,3 +1,8 @@
-    npm install
-    unzip the mirador build.zip
-    npm start
+    
+```
+npm install
+cd node_modules/mirador
+unzip build.zip
+cd ../../
+npm start
+```
