@@ -46,7 +46,9 @@ ipfsEndpoint = function(ipfsDbInstance) {
     create: function(annotation, successCallback) {
       var _this = this;
       console.log('create called');
+      console.log(annotation);
       delete(annotation.endpoint);
+      console.log(annotation);
       _this.db.pushResource(annotation);
       annotation.fullId = annotation["@id"];
       annotation["@id"] = Mirador.genUUID();
