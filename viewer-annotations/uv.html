@@ -40,7 +40,7 @@
 
         var uv;
 
-        function connect(manifest, topic, cb) {
+        function connect(manifest, cb) {
 
             uv.set({
                 root: 'vendor/uv',
@@ -62,16 +62,7 @@
 
                 db.ipfs.id((err, _peerInfo) => {
 
-                    var annotationList = db.annotationList({
-                        "@context": "http://iiif.io/api/search/0/context.json",
-                        "@id": "https://wellcomelibrary.org/annoservices/search/b18035723?q=gene",
-                        "@type": "sc:AnnotationList",
-                        "within": {
-                            "@type": "sc:Layer"
-                        },
-                        "startIndex": 0,
-                        "resources": []
-                    });
+                    var annotationList = db.annotationList("http://files.universalviewer.io/annotationlist/richardson7.json#ipfs-iiif-db-example");
 
                     annotationList.on('mutation', (event) => {
                         console.log('new mutation', event);
@@ -118,7 +109,7 @@
                 // } else if (!topic) {
                 //     alert('please specify an annotation topic');
                 // } else {
-                    connect('https://iiif.lib.harvard.edu/manifests/drs:5981093', 'ipfs-iiif-db-example', function() {
+                    connect('http://files.universalviewer.io/annotationlist/richardson7.json#ipfs-iiif-db-example', function() {
                         $connect.prop('disabled', true);
                     });
                 //}

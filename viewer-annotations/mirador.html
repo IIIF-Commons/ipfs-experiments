@@ -31,7 +31,7 @@
 
            annotationList = db.annotationList({
              "@context": "http://iiif.io/api/search/0/context.json",
-             "@id": "https://wellcomelibrary.org/annoservices/search/b18035723?q=gene",
+             "@id": "http://files.universalviewer.io/annotationlist/richardson7.json#ipfs-iiif-db-example",
              "@type": "sc:AnnotationList",
              "within": {
                "@type": "sc:Layer"
@@ -47,7 +47,7 @@
              layout: "1x1",
              buildPath: 'vendor/build/mirador',
              data: [
-               { "manifestUri": "http://wellcomelibrary.org/iiif/b18035723/manifest", "location": "Harvard University"},
+               { "manifestUri": "http://files.universalviewer.io/annotationlist/richardson7.json", "location": "Harvard University"},
              ],
              "windowObjects": [],
              "annotationEndpoint": { "name":"IPFS DB", "module": "IpfsEndpoint" },
