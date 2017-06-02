@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "copy": "cp -R node_modules/universalviewer/uv vendor/uv && cp -R node_modules/mirador/build/mirador vendor/mirador",
-    "serve": "http-server -c-1 -p 8083",
-    "start": "npm run copy && npm run serve"
+    "init": "cd node_modules/mirador && unzip build.zip && cd ../../ && npm run copy",
+    "start": "http-server -c-1 -p 8888"
   },
   "repository": {
     "type": "git",
