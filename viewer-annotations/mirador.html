@@ -9,7 +9,7 @@
        position: fixed;
      }
     </style>
-    <script src="https://unpkg.com/ipfs-iiif-db/dist/browser.min.js"></script>
+    <script src="https://unpkg.com/ipfs-iiif-db@2.4.0/dist/browser.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
     <script src="vendor/mirador/mirador.min.js"></script>
     <script src="js/ipfs-endpoint.js"></script>
@@ -29,9 +29,11 @@
          db.ipfs.id((err, _peerInfo) => {
            console.log("ipfs started");
 
+           console.log("mirador peerid:", _peerInfo.id);
+
            annotationList = db.annotationList({
              "@context": "http://iiif.io/api/search/0/context.json",
-             "@id": "https://wellcomelibrary.org/annoservices/search/b18035723?q=gene",
+             "@id": "http://wellcomelibrary.org/iiif/b18035723/manifest#ipfs-iiif-db-example",
              "@type": "sc:AnnotationList",
              "within": {
                "@type": "sc:Layer"

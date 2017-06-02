@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="vendor/uv/uv.css">
     <script type="text/javascript" src="vendor/uv/lib/offline.js"></script>
     <script type="text/javascript" src="vendor/uv/helpers.js"></script>
-    <script src="https://unpkg.com/ipfs-iiif-db/dist/browser.min.js"></script>
+    <script src="https://unpkg.com/ipfs-iiif-db@2.4.0/dist/browser.js"></script>
     <style>
         body {
             margin: 0px;
@@ -30,8 +30,8 @@
 
     <div id="options" style="display: none">
         <div>
-            <input id="manifest" placeholder="iiif manifest" type="text" value="http://wellcomelibrary.org/iiif/b18035723/manifest" />
-            <input id="topic" type="text" placeholder="topic" value="ipfs-iiif-db-example" />
+            <!--<input id="manifest" placeholder="iiif manifest" type="text" value="http://wellcomelibrary.org/iiif/b18035723/manifest" />
+            <input id="topic" type="text" placeholder="topic" value="ipfs-iiif-db-example" />-->
             <button id="connect">Connect to IPFS</button>
         </div>
     </div>
@@ -40,7 +40,7 @@
 
         var uv;
 
-        function connect(manifest, topic, cb) {
+        function connect(manifest, cb) {
 
             uv.set({
                 root: 'vendor/uv',
@@ -62,9 +62,11 @@
 
                 db.ipfs.id((err, _peerInfo) => {
 
+                    console.log("uv peerid:", _peerInfo.id);
+
                     var annotationList = db.annotationList({
                         "@context": "http://iiif.io/api/search/0/context.json",
-                        "@id": "https://wellcomelibrary.org/annoservices/search/b18035723?q=gene",
+                        "@id": "http://wellcomelibrary.org/iiif/b18035723/manifest#ipfs-iiif-db-example",
                         "@type": "sc:AnnotationList",
                         "within": {
                             "@type": "sc:Layer"
@@ -73,9 +75,11 @@
                         "resources": []
                     });
 
-                    annotationList.on('mutation', (event) => {
+                  annotationList.on('mutation', (event) => {
                         console.log('new mutation', event);
-                        setAnnotations(annotationList.toJSON());
+                    console.log('parsed annotations');
+                    console.log(convertAnnotations(annotationList.toJSON()));
+                        setAnnotations(convertAnnotations(annotationList.toJSON()));
                     });
 
                     // var changes = db.get(topic, true, (annotations) => {
@@ -91,7 +95,25 @@
             });
         }
 
+     function convertAnnotations(annotations) {
+       annotations.resources = annotations.resources.map(function(annotation) {
+         return {
+           "@id": annotation['@id'],
+           "@type": "oa:Annotation",
+           "motivation": "sc:painting",
+           "resource": {
+             "@type": "cnt:ContentAsText",
+             "chars": annotation.resource[0].chars
+           },
+           "on": annotation.on[0].full + '#' + annotation.on[0].selector.default.value
+         };
+       });
+
+       return annotations;
+     }
+
         function setAnnotations(annotations) {
+          console.log(annotations);
             uv.set({
                 annotations: annotations
             });
@@ -110,18 +132,17 @@
 
             $connect.on('click', function() {
 
-                var manifest = $('#manifest').val();
-                var topic = $('#topic').val();
+                //var manifest = $('#manifest').val();
  
-                if (!manifest) {
-                    alert('please specify a manifest to annotate');
-                } else if (!topic) {
-                    alert('please specify an annotation topic');
-                } else {
-                    connect(manifest, topic, function() {
+                // if (!manifest) {
+                //     alert('please specify a manifest to annotate');
+                // } else if (!topic) {
+                //     alert('please specify an annotation topic');
+                // } else {
+                    connect('http://wellcomelibrary.org/iiif/b18035723/manifest', function() {
                         $connect.prop('disabled', true);
                     });
-                }
+                //}
             });
 
         }, false);
