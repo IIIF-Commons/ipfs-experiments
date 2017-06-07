@@ -44,20 +44,25 @@
 
            Mirador.IpfsEndpoint = ipfsEndpoint(annotationList);
 
-           myMiradorInstance = Mirador({
-             id: "viewer",
-             layout: "1x1",
-             buildPath: 'vendor/build/mirador',
-             data: [
-               { "manifestUri": "http://wellcomelibrary.org/iiif/b18035723/manifest", "location": "Harvard University"},
-             ],
-             "windowObjects": [],
-             "annotationEndpoint": { "name":"IPFS DB", "module": "IpfsEndpoint" },
-             "sidePanelOptions" : {
-               "tocTabAvailable": true,
-               "layersTabAvailable": true,
-               "searchTabAvailable": true
-             }
+           $.get('http://wellcomelibrary.org/iiif/b18035723/manifest', function(manifest) {
+             manifest.sequences[0].canvases.forEach(function(canvas){
+               delete canvas.otherContent;
+             });
+             myMiradorInstance = Mirador({
+               id: "viewer",
+               layout: "1x1",
+               buildPath: 'vendor/build/mirador/',
+               data: [
+                 { "manifestContent": manifest, "location": "Wellcome Library"},
+               ],
+               "windowObjects": [],
+               "annotationEndpoint": { "name":"IPFS DB", "module": "IpfsEndpoint" },
+               "sidePanelOptions" : {
+                 "tocTabAvailable": true,
+                 "layersTabAvailable": true,
+                 "searchTabAvailable": true
+               }
+             });
            });
          });
        });
