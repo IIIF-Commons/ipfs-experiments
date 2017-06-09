@@ -33,6 +33,7 @@
             <!--<input id="manifest" placeholder="iiif manifest" type="text" value="http://wellcomelibrary.org/iiif/b18035723/manifest" />
             <input id="topic" type="text" placeholder="topic" value="ipfs-iiif-db-example" />-->
             <button id="connect">Connect to IPFS</button>
+            <!--<button id="addAnnotation" disabled>Add Annotation</button>-->
         </div>
     </div>
 
@@ -77,9 +78,14 @@
 
                   annotationList.on('mutation', (event) => {
                         console.log('new mutation', event);
-                    console.log('parsed annotations');
-                    console.log(convertAnnotations(annotationList.toJSON()));
-                        setAnnotations(convertAnnotations(annotationList.toJSON()));
+                        console.log('parsed annotations');
+                    
+                        var list = annotationList.toJSON();
+
+                        if (list.resources.length) {
+                            console.log(convertAnnotations(annotationList.toJSON()));
+                            setAnnotations(convertAnnotations(annotationList.toJSON()));
+                        }
                     });
 
                     // var changes = db.get(topic, true, (annotations) => {
@@ -95,22 +101,22 @@
             });
         }
 
-     function convertAnnotations(annotations) {
-       annotations.resources = annotations.resources.map(function(annotation) {
-         return {
-           "@id": annotation['@id'],
-           "@type": "oa:Annotation",
-           "motivation": "sc:painting",
-           "resource": {
-             "@type": "cnt:ContentAsText",
-             "chars": annotation.resource[0].chars
-           },
-           "on": annotation.on[0].full + '#' + annotation.on[0].selector.default.value
-         };
-       });
+        function convertAnnotations(annotations) {
+            annotations.resources = annotations.resources.map(function(annotation) {
+                return {
+                "@id": annotation['@id'],
+                "@type": "oa:Annotation",
+                "motivation": "sc:painting",
+                "resource": {
+                    "@type": "cnt:ContentAsText",
+                    "chars": annotation.resource[0].chars
+                },
+                "on": annotation.on[0].full + '#' + annotation.on[0].selector.default.value
+                };
+            });
 
-       return annotations;
-     }
+            return annotations;
+        }
 
         function setAnnotations(annotations) {
           console.log(annotations);
@@ -146,6 +152,36 @@
             });
 
         }, false);
+
+        // dummyAnnotationList = {
+        //     "@context": "http://iiif.io/api/search/0/context.json",
+        //     "@id": "http://wellcomelibrary.org/iiif/b18035723/manifest",
+        //     "@type": "sc:AnnotationList",
+        //     "within": {
+        //         "@type": "sc:Layer"
+        //     },
+        //     "startIndex": 0,
+        //     "resources": []
+        // };
+
+        // var $addAnnotation = $('#addAnnotation');
+
+        // // load test annotations
+        // $.getJSON('test-annotations.json', function(testAnnotations) {
+
+        //     $addAnnotation.prop('disabled', false);
+
+        //     $addAnnotation.on('click', function() {
+
+        //         var annotation = testAnnotations[Math.floor(Math.random() * testAnnotations.length)];
+        //         annotation.on = "https://wellcomelibrary.org/iiif/b18035723/canvas/c0#xywh=909,3067,339,50";
+        //         dummyAnnotationList.resources.push(annotation);
+
+        //         uv.set({
+        //             annotations: dummyAnnotationList
+        //         });
+        //     });
+        // });
 
     </script>
 
