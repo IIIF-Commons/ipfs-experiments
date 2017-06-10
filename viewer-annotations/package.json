@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/viewdir/ipfs-experiments#readme",
   "devDependencies": {
+    "http-server": "0.10.0",
     "jest": "^19.0.2"
   },
   "dependencies": {
