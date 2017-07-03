@@ -6,7 +6,8 @@
   "scripts": {
     "copy": "cp -R node_modules/universalviewer/uv vendor/uv && cp -R node_modules/mirador/build/mirador vendor/mirador",
     "init": "cd node_modules/mirador && unzip build.zip && cd ../../ && npm run copy",
-    "start": "http-server -c-1 -p 8888"
+    "start": "http-server -c-1 -p 8888",
+    "postinstall": "npm run init"
   },
   "repository": {
     "type": "git",
